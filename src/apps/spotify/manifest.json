@@ -1,0 +1,58 @@
+{
+  "id": "spotify",
+  "name": "Spotify Record Player",
+  "description": "Vinyl-inspired Spotify playback controls and status",
+  "entry": "./App.jsx",
+  "displayType": "rectangular",
+  "defaultScreen": {
+    "width": 1280,
+    "height": 720
+  },
+  "tags": ["music", "spotify", "audio"],
+  "settings": {
+    "defaults": {
+      "displayType": "rectangular",
+      "screen": {
+        "width": 1280,
+        "height": 720
+      },
+      "credentials": {
+        "username": "",
+        "clientId": "",
+        "clientSecret": ""
+      }
+    },
+    "sections": [
+      {
+        "id": "spotify-credentials",
+        "title": "Spotify API credentials",
+        "description": "Provide the OAuth credentials required for Spotify Web API access, then click Authorize Spotify to finish linking your account.",
+        "fields": [
+          {
+            "id": "spotify-username",
+            "key": "credentials.username",
+            "type": "text",
+            "label": "Account username",
+            "placeholder": "reflect-bot"
+          },
+          {
+            "id": "spotify-client-id",
+            "key": "credentials.clientId",
+            "type": "text",
+            "label": "Client ID",
+            "placeholder": "0123456789abcdef",
+            "helperText": "Set the redirect URI to /api/spotify/callback on your current host."
+          },
+          {
+            "id": "spotify-client-secret",
+            "key": "credentials.clientSecret",
+            "type": "password",
+            "label": "Client secret",
+            "placeholder": "••••••••",
+            "helperText": "Keep this secret safe; it is stored encrypted on the server."
+          }
+        ]
+      }
+    ]
+  }
+}

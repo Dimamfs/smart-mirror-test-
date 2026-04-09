@@ -1,0 +1,6 @@
+# Friday device client runtime state
+friday/data/client-state.json
+friday/data/settings-cache.json
+# Node dependencies
+node_modules/
+
