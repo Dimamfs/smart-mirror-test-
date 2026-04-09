@@ -19,14 +19,30 @@ import { LANGUAGES } from '../data/translations';
 import { CAMERA_POSITION_OPTIONS } from '../utils/handTracking';
 
 const REALTIME_MODELS = [
-  { value: 'gpt-4o-mini-realtime-preview', label: 'GPT-4o mini Realtime (preview)' },
-  { value: 'gpt-4o-realtime-preview', label: 'GPT-4o Realtime (preview)' }
+  { value: 'gpt-4o-realtime-preview-2024-12-17', label: 'GPT-4o Realtime (Dec 2024) — recommended' },
+  { value: 'gpt-4o-mini-realtime-preview-2024-12-17', label: 'GPT-4o mini Realtime (Dec 2024) — faster' },
+  { value: 'gpt-4o-realtime-preview', label: 'GPT-4o Realtime (latest alias)' },
+  { value: 'gpt-4o-mini-realtime-preview', label: 'GPT-4o mini Realtime (latest alias)' },
+];
+
+const CHAT_MODELS = [
+  { value: 'gpt-4o',          label: 'GPT-4o — recommended' },
+  { value: 'gpt-4o-mini',     label: 'GPT-4o mini — faster & cheaper' },
+  { value: 'gpt-4.1',         label: 'GPT-4.1' },
+  { value: 'gpt-4.1-mini',    label: 'GPT-4.1 mini' },
+  { value: 'gpt-4-turbo',     label: 'GPT-4 Turbo' },
 ];
 
 const VOICE_OPTIONS = [
-  { value: 'alloy', label: 'Alloy' },
-  { value: 'verse', label: 'Verse' },
-  { value: 'aria', label: 'Aria' }
+  { value: 'alloy',   label: 'Alloy' },
+  { value: 'ash',     label: 'Ash' },
+  { value: 'ballad',  label: 'Ballad' },
+  { value: 'coral',   label: 'Coral' },
+  { value: 'echo',    label: 'Echo' },
+  { value: 'sage',    label: 'Sage' },
+  { value: 'shimmer', label: 'Shimmer' },
+  { value: 'verse',   label: 'Verse' },
+  { value: 'aria',    label: 'Aria' },
 ];
 
 const Settings = () => {
@@ -1112,7 +1128,7 @@ const Settings = () => {
               <div>
                 <h2 className="text-xl font-semibold">AI Assistant</h2>
                 <p className="text-sm text-gray-400">
-                  Configure the realtime voice assistant that responds when you say “Hey Mirror”.
+                  Configure the realtime voice assistant that responds when you say "Hey Mirror".
                 </p>
               </div>
               <div className="flex items-center justify-between md:justify-end w-full md:w-auto">
@@ -1142,16 +1158,27 @@ const Settings = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium mb-2">Realtime Model</label>
+                <label className="block text-sm font-medium mb-2">Voice (Realtime) Model</label>
                 <select
-                  value={assistantSettings.model || REALTIME_MODELS[0].value}
-                  onChange={(e) => handleAiAssistantSettingChange('model', e.target.value)}
+                  value={assistantSettings.realtimeModel || REALTIME_MODELS[0].value}
+                  onChange={(e) => handleAiAssistantSettingChange('realtimeModel', e.target.value)}
                   className="bg-gray-700 text-white rounded px-3 py-2 w-full"
                 >
-                  {REALTIME_MODELS.map(model => (
-                    <option key={model.value} value={model.value}>
-                      {model.label}
-                    </option>
+                  {REALTIME_MODELS.map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Chat (Text / Fallback) Model</label>
+                <select
+                  value={assistantSettings.chatModel || CHAT_MODELS[0].value}
+                  onChange={(e) => handleAiAssistantSettingChange('chatModel', e.target.value)}
+                  className="bg-gray-700 text-white rounded px-3 py-2 w-full"
+                >
+                  {CHAT_MODELS.map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
                   ))}
                 </select>
               </div>
@@ -1206,7 +1233,35 @@ const Settings = () => {
                   disabled={!aiAssistantSettings.enabled}
                 />
                 <p className="text-xs text-gray-400 mt-2">
-                  The assistant listens for the phrase <span className="text-blue-300 font-semibold">“Hey {assistantSettings.name || 'Mirror'}”</span>.
+                  The assistant listens for the phrase <span className="text-blue-300 font-semibold">"Hey {assistantSettings.name || 'Mirror'}"</span>.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">ElevenLabs API Key</label>
+                <input
+                  type="password"
+                  value={assistantSettings.elevenLabsKey || ''}
+                  onChange={(e) => handleAiAssistantSettingChange('elevenLabsKey', e.target.value)}
+                  className="bg-gray-700 text-white rounded px-3 py-2 w-full"
+                  placeholder="sk_..."
+                  disabled={!aiAssistantSettings.enabled}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Used for high-quality voice output. Leave blank to use browser speech synthesis as fallback.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">ElevenLabs Voice ID</label>
+                <input
+                  type="text"
+                  value={assistantSettings.elevenLabsVoiceId || ''}
+                  onChange={(e) => handleAiAssistantSettingChange('elevenLabsVoiceId', e.target.value)}
+                  className="bg-gray-700 text-white rounded px-3 py-2 w-full"
+                  placeholder="JBFqnCBsd6RMkjVDRZzb"
+                  disabled={!aiAssistantSettings.enabled}
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Find voice IDs at <span className="text-blue-400">elevenlabs.io/voice-lab</span>. Default: George (British).
                 </p>
               </div>
               <div className="md:col-span-2">
